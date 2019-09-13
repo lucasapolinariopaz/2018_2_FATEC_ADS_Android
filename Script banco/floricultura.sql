@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 19-Nov-2018 às 20:05
+-- Generation Time: 28-Nov-2018 às 20:18
 -- Versão do servidor: 10.1.35-MariaDB
 -- versão do PHP: 7.2.9
 
@@ -21,6 +21,37 @@ SET time_zone = "+00:00";
 --
 -- Database: `floricultura`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `carrinho`
+--
+
+CREATE TABLE `carrinho` (
+  `cod_car` int(11) NOT NULL,
+  `cod_prod` int(11) NOT NULL,
+  `fkvenda` int(11) NOT NULL,
+  `idpprod` varchar(50) NOT NULL,
+  `unidade` int(11) NOT NULL,
+  `val_total` decimal(10,2) NOT NULL,
+  `valor_unitario` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `carrinho`
+--
+
+INSERT INTO `carrinho` (`cod_car`, `cod_prod`, `fkvenda`, `idpprod`, `unidade`, `val_total`, `valor_unitario`) VALUES
+(18, 2, 2, 'sera', 2, '10.00', '10.00');
+
+--
+-- Acionadores `carrinho`
+--
+DELIMITER $$
+CREATE TRIGGER `insert_det` AFTER UPDATE ON `carrinho` FOR EACH ROW INSERT INTO detalhe_venda  (produto, unidade, valor_unitario, valor_total, idfk_venda, idfk_prod)  VALUES (New.idpprod,New.unidade, New.valor_unitario,  New.val_total,New.fkvenda, New.cod_prod)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -72,9 +103,55 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`cod_cli`, `nome_cli`, `cpf_cli`, `endereco`, `num_endereco`, `cidade_uf`, `bairro`, `telefone`, `celular`) VALUES
-(5, 'ANA', '12345', 'r ddddd', 23, 'Itape/sp', 'lalala', '33333', '4444'),
-(6, 'Souza', '1010', 'r ahsuahs', 65, 'Itape/sp', 'fantasia', '232323', '34343'),
+(5, 'ANA', '12345', 'r dd', 23, 'Itape/sp', 'lalala', '33333', '4444'),
 (7, 'cesar', '102030', 'erere', 233, 'frfrf', 'vffvf', '34344', '4545');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `detalhe_venda`
+--
+
+CREATE TABLE `detalhe_venda` (
+  `cod_detalhe` int(11) NOT NULL,
+  `produto` varchar(20) NOT NULL,
+  `unidade` int(11) NOT NULL,
+  `valor_unitario` decimal(10,2) NOT NULL,
+  `valor_total` decimal(10,2) NOT NULL,
+  `idfk_venda` int(11) NOT NULL,
+  `idfk_prod` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `detalhe_venda`
+--
+
+INSERT INTO `detalhe_venda` (`cod_detalhe`, `produto`, `unidade`, `valor_unitario`, `valor_total`, `idfk_venda`, `idfk_prod`) VALUES
+(12, '3', 10, '0.00', '30.00', 3, 1),
+(13, '4', 10, '0.00', '40.00', 3, 1),
+(14, 'fffffffffff', 3, '4.00', '30.00', 3, 2),
+(15, 'ddd', 2, '10.00', '20.00', 3, 2),
+(16, 'dfdfdf', 3, '10.00', '30.00', 3, 5),
+(17, 'sedefre', 4, '5.00', '30.00', 3, 5),
+(18, '3', 10, '0.00', '30.00', 4, 1),
+(19, '4', 10, '0.00', '40.00', 4, 1),
+(20, 'fffffffffff', 3, '4.00', '30.00', 4, 2),
+(21, 'ddd', 2, '10.00', '20.00', 4, 2),
+(22, 'dfdfdf', 3, '10.00', '30.00', 4, 5),
+(23, 'sedefre', 4, '5.00', '30.00', 4, 5),
+(24, 'sementes', 6, '10.00', '30.00', 4, 1),
+(28, 'kkkk', 3, '4.00', '30.00', 7, 1),
+(29, 'kkkk', 3, '4.00', '30.00', 8, 1),
+(30, 'fffffffffff', 3, '4.00', '30.00', 8, 2),
+(31, 'fff', 5, '55.00', '40.00', 8, 3);
+
+--
+-- Acionadores `detalhe_venda`
+--
+DELIMITER $$
+CREATE TRIGGER `desconto_trigger` AFTER INSERT ON `detalhe_venda` FOR EACH ROW UPDATE produto as pd inner JOIN detalhe_venda as dt set pd.quantidade=pd.quantidade-NEW.unidade where pd.cod_prod=new.idfk_prod
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -141,21 +218,21 @@ CREATE TABLE `produto` (
 --
 
 INSERT INTO `produto` (`cod_prod`, `nome`, `preco`, `Id_categoria_fk`, `quantidade`) VALUES
-(1, '20 Sementes de Orquídea', 10.00, 1, 6),
-(2, 'Buquê de 30 Rosas Vermelhas', 230.00, 2, 4),
-(3, 'Cesta de Flores do Campo', 150.00, 3, 2),
-(4, 'Cachepot de Cerâmica', 80.00, 4, 2),
-(5, 'Violeta', 15.00, 5, 0),
-(6, 'Cacto Mandacaru Pote 30L', 100.00, 6, 8),
-(7, 'Mix de Margaridas vaso de vidro', 50.00, 7, 6),
-(8, 'Coroa de Flores para Velório', 600.00, 8, 4),
-(9, 'Terra Vegetal 5 Kg', 10.00, 9, 2),
-(10, 'Cesta de Chocolate', 150.00, 10, 0),
-(13, 'tulipa', 1.00, 5, 1),
-(32, 'sd', 43.00, 5, 34),
-(33, 'weweweweewe', 3434343.00, 5, 454545454),
-(35, 'Margarida', 14.00, 5, 50),
-(36, 'yyy', 34.00, 6, 5);
+(1, '20 Sementes de Orquídea', 10.00, 1, 5),
+(2, 'Buquê de 30 Rosas Vermelhas', 230.00, 2, 8),
+(3, 'Cesta de Flores do Campo', 150.00, 3, 12),
+(4, 'Cachepot de Cerâmica', 80.00, 4, 17),
+(5, 'Violeta', 15.00, 5, 11),
+(6, 'Cacto Mandacaru Pote 30L', 100.00, 6, 17),
+(7, 'Mix de Margaridas vaso de vidro', 50.00, 7, 17),
+(8, 'Coroa de Flores para Velório', 600.00, 8, 17),
+(9, 'Terra Vegetal 5 Kg', 10.00, 9, 17),
+(10, 'Cesta de Chocolate', 150.00, 10, 17),
+(13, 'tulipa', 1.00, 5, 17),
+(32, 'sd', 43.00, 5, 31),
+(33, 'weweweweewe', 3434343.00, 5, 17),
+(35, 'Margarida', 14.00, 5, 47),
+(36, 'yyy', 34.00, 6, 17);
 
 -- --------------------------------------------------------
 
@@ -165,27 +242,42 @@ INSERT INTO `produto` (`cod_prod`, `nome`, `preco`, `Id_categoria_fk`, `quantida
 
 CREATE TABLE `venda` (
   `cod_venda` int(11) NOT NULL,
-  `data` varchar(20) NOT NULL,
-  `valor` decimal(10,0) NOT NULL,
-  `forma_pagamento` varchar(50) NOT NULL,
-  `cod_cli` int(11) NOT NULL
+  `data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `cod_cli` int(11) NOT NULL,
+  `form_pg` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
--- Estrutura da tabela `venda_produto`
+-- Extraindo dados da tabela `venda`
 --
 
-CREATE TABLE `venda_produto` (
-  `cod_venda` int(11) NOT NULL,
-  `cod_prod` int(11) NOT NULL,
-  `qtd_prod_venda` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `venda` (`cod_venda`, `data`, `cod_cli`, `form_pg`) VALUES
+(1, '2018-11-28 16:50:20', 5, 'cartao'),
+(2, '2018-11-28 16:50:20', 7, 'a vista'),
+(3, '2018-11-28 16:50:20', 5, 'cartao'),
+(4, '2018-11-28 16:50:20', 7, 'a vista'),
+(5, '2018-11-28 16:50:20', 5, 'a vista'),
+(6, '2018-11-28 16:50:20', 7, 'cartao'),
+(7, '2018-11-28 16:50:20', 5, 'a vista'),
+(8, '2018-11-28 16:50:38', 5, 'a vista');
+
+--
+-- Acionadores `venda`
+--
+DELIMITER $$
+CREATE TRIGGER `upccarrinho` AFTER INSERT ON `venda` FOR EACH ROW UPDATE carrinho set fkvenda=new.cod_venda
+$$
+DELIMITER ;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `carrinho`
+--
+ALTER TABLE `carrinho`
+  ADD PRIMARY KEY (`cod_car`);
 
 --
 -- Indexes for table `categoria`
@@ -198,6 +290,14 @@ ALTER TABLE `categoria`
 --
 ALTER TABLE `cliente`
   ADD PRIMARY KEY (`cod_cli`);
+
+--
+-- Indexes for table `detalhe_venda`
+--
+ALTER TABLE `detalhe_venda`
+  ADD PRIMARY KEY (`cod_detalhe`),
+  ADD KEY `fk_venda` (`idfk_venda`),
+  ADD KEY `fk_prod` (`idfk_prod`);
 
 --
 -- Indexes for table `funcionario`
@@ -227,15 +327,14 @@ ALTER TABLE `venda`
   ADD KEY `fk_venda_cliente` (`cod_cli`);
 
 --
--- Indexes for table `venda_produto`
---
-ALTER TABLE `venda_produto`
-  ADD PRIMARY KEY (`cod_venda`,`cod_prod`),
-  ADD KEY `fk_vp_produto` (`cod_prod`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `carrinho`
+--
+ALTER TABLE `carrinho`
+  MODIFY `cod_car` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `categoria`
@@ -248,6 +347,12 @@ ALTER TABLE `categoria`
 --
 ALTER TABLE `cliente`
   MODIFY `cod_cli` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `detalhe_venda`
+--
+ALTER TABLE `detalhe_venda`
+  MODIFY `cod_detalhe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `funcionario`
@@ -271,11 +376,18 @@ ALTER TABLE `produto`
 -- AUTO_INCREMENT for table `venda`
 --
 ALTER TABLE `venda`
-  MODIFY `cod_venda` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cod_venda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Limitadores para a tabela `detalhe_venda`
+--
+ALTER TABLE `detalhe_venda`
+  ADD CONSTRAINT `fk_prod` FOREIGN KEY (`idfk_prod`) REFERENCES `produto` (`cod_prod`),
+  ADD CONSTRAINT `fk_venda` FOREIGN KEY (`idfk_venda`) REFERENCES `venda` (`cod_venda`);
 
 --
 -- Limitadores para a tabela `funcionario`
@@ -294,13 +406,6 @@ ALTER TABLE `produto`
 --
 ALTER TABLE `venda`
   ADD CONSTRAINT `fk_venda_cliente` FOREIGN KEY (`cod_cli`) REFERENCES `cliente` (`cod_cli`);
-
---
--- Limitadores para a tabela `venda_produto`
---
-ALTER TABLE `venda_produto`
-  ADD CONSTRAINT `fk_vp_produto` FOREIGN KEY (`cod_prod`) REFERENCES `produto` (`cod_prod`),
-  ADD CONSTRAINT `fk_vp_venda` FOREIGN KEY (`cod_venda`) REFERENCES `venda` (`cod_venda`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
