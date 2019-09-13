@@ -17,14 +17,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
        die("Ops, falhou....: " . $conn->connect_error);
     }
-
-    //$busca = isset($_POST['buscaprod']) ? $_POST['buscaprod'] : '';	
-	$busca = $_POST['buscaprod'];	
-	if($busca!="")
-{
-    //$sql = "SELECT nome,preco,cod_prod,quantidade,Id_categoria_fk  FROM produto WHERE nome like '".$busca."%'"; 
-	$sql="SELECT p.cod_prod, p.nome, p.preco, c.nome_categoria, p.quantidade FROM produto p,categoria c WHERE p.id_categoria_fk=c.cod_categoria and  p.nome like '".$busca."%'";
-    $result = $conn->query($sql);
+	
+	$sql="SELECT cod_venda,data,form_pg,cpfClivenda FROM venda";
+	$result = $conn->query($sql);
        $tem=array(); 
 	   if($result->num_rows > 0)
 {
@@ -37,25 +32,12 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 	   else
 {		
 		$tem["erro"]=true;
-		$tem["mensagem"]="Não há produtos";		     
+		$tem["mensagem"]="Não há vendas";	
+		
 }	
-}
+ 
+
 	echo json_encode($tem);
 	$conn->close();
 } 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
