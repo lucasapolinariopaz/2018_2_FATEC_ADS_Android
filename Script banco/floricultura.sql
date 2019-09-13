@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 18-Out-2018 às 21:42
+-- Generation Time: 06-Nov-2018 às 16:05
 -- Versão do servidor: 10.1.35-MariaDB
 -- versão do PHP: 7.2.9
 
@@ -21,6 +21,33 @@ SET time_zone = "+00:00";
 --
 -- Database: `floricultura`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `categoria`
+--
+
+CREATE TABLE `categoria` (
+  `cod_categoria` int(11) NOT NULL,
+  `nome_categoria` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `categoria`
+--
+
+INSERT INTO `categoria` (`cod_categoria`, `nome_categoria`) VALUES
+(1, 'Sementes'),
+(2, 'Buquês'),
+(3, 'Cestas'),
+(4, 'Vasos'),
+(5, 'Flores'),
+(6, 'Plantas'),
+(7, 'Arranjos'),
+(8, 'Coroas'),
+(9, 'Insumos'),
+(10, 'Presentes');
 
 -- --------------------------------------------------------
 
@@ -71,7 +98,8 @@ CREATE TABLE `funcionario` (
 
 INSERT INTO `funcionario` (`id_fun`, `nome`, `cpf_func`, `data_reg`, `id_per_fk`, `senha_fun`) VALUES
 (1, 'cesar', 1234567, '2018-10-18 19:36:55', 1, '123'),
-(2, 'lucas', 123456, '2018-10-18 19:36:55', 2, '123');
+(2, 'lucas', 123456, '2018-10-18 19:36:55', 2, '123'),
+(3, 'suzana', 12345678, '2018-10-25 02:40:14', 2, '123');
 
 -- --------------------------------------------------------
 
@@ -104,7 +132,7 @@ CREATE TABLE `produto` (
   `cod_prod` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
   `preco` decimal(10,0) NOT NULL,
-  `categoria` varchar(50) NOT NULL,
+  `Id_categoria_fk` int(11) NOT NULL,
   `quantidade` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -112,17 +140,24 @@ CREATE TABLE `produto` (
 -- Extraindo dados da tabela `produto`
 --
 
-INSERT INTO `produto` (`cod_prod`, `nome`, `preco`, `categoria`, `quantidade`) VALUES
-(1, '20 Sementes de Orquídea', '10', 'Sementes', 6),
-(2, 'Buquê de 30 Rosas Vermelhas', '230', 'Buquês', 4),
-(3, 'Cesta de Flores do Campo', '150', 'Cestas', 2),
-(4, 'Cachepot de Cerâmica', '80', 'Vasos', 2),
-(5, 'Violeta', '15', 'Flores', 0),
-(6, 'Cacto Mandacaru Pote 30L', '100', 'Plantas', 8),
-(7, 'Mix de Margaridas vaso de vidro', '50', 'Arranjos', 6),
-(8, 'Coroa de Flores para Velório', '600', 'Coroas', 4),
-(9, 'Terra Vegetal 5 Kg', '10', 'Insumos', 2),
-(10, 'Cesta de Chocolate', '150', 'Presentes', 0);
+INSERT INTO `produto` (`cod_prod`, `nome`, `preco`, `Id_categoria_fk`, `quantidade`) VALUES
+(1, '20 Sementes de Orquídea', '10', 1, 6),
+(2, 'Buquê de 30 Rosas Vermelhas', '230', 2, 4),
+(3, 'Cesta de Flores do Campo', '150', 3, 2),
+(4, 'Cachepot de Cerâmica', '80', 4, 2),
+(5, 'Violeta', '15', 5, 0),
+(6, 'Cacto Mandacaru Pote 30L', '100', 6, 8),
+(7, 'Mix de Margaridas vaso de vidro', '50', 7, 6),
+(8, 'Coroa de Flores para Velório', '600', 8, 4),
+(9, 'Terra Vegetal 5 Kg', '10', 9, 2),
+(10, 'Cesta de Chocolate', '150', 10, 0),
+(13, 'tulipa', '1', 5, 1),
+(32, 'sd', '43', 5, 34),
+(33, 'wde', '343', 3, 34),
+(34, 'rfedf', '454', 3, 545),
+(35, 'yyy', '34', 6, 5),
+(36, 'yyy', '34', 6, 5),
+(37, 'yyy', '34', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -155,6 +190,12 @@ CREATE TABLE `venda_produto` (
 --
 
 --
+-- Indexes for table `categoria`
+--
+ALTER TABLE `categoria`
+  ADD PRIMARY KEY (`cod_categoria`);
+
+--
 -- Indexes for table `cliente`
 --
 ALTER TABLE `cliente`
@@ -179,7 +220,8 @@ ALTER TABLE `perfil`
 -- Indexes for table `produto`
 --
 ALTER TABLE `produto`
-  ADD PRIMARY KEY (`cod_prod`);
+  ADD PRIMARY KEY (`cod_prod`),
+  ADD KEY `Id_categoria_fk` (`Id_categoria_fk`);
 
 --
 -- Indexes for table `venda`
@@ -200,6 +242,12 @@ ALTER TABLE `venda_produto`
 --
 
 --
+-- AUTO_INCREMENT for table `categoria`
+--
+ALTER TABLE `categoria`
+  MODIFY `cod_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `cliente`
 --
 ALTER TABLE `cliente`
@@ -209,7 +257,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT for table `funcionario`
 --
 ALTER TABLE `funcionario`
-  MODIFY `id_fun` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_fun` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `perfil`
@@ -221,7 +269,7 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT for table `produto`
 --
 ALTER TABLE `produto`
-  MODIFY `cod_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `cod_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `venda`
@@ -244,6 +292,12 @@ ALTER TABLE `cliente`
 --
 ALTER TABLE `funcionario`
   ADD CONSTRAINT `funcionario_ibfk_1` FOREIGN KEY (`id_per_fk`) REFERENCES `perfil` (`id_per`);
+
+--
+-- Limitadores para a tabela `produto`
+--
+ALTER TABLE `produto`
+  ADD CONSTRAINT `produto_ibfk_1` FOREIGN KEY (`Id_categoria_fk`) REFERENCES `categoria` (`cod_categoria`);
 
 --
 -- Limitadores para a tabela `venda`
