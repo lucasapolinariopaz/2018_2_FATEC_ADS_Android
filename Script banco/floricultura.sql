@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 06-Nov-2018 às 16:05
+-- Generation Time: 19-Nov-2018 às 20:05
 -- Versão do servidor: 10.1.35-MariaDB
 -- versão do PHP: 7.2.9
 
@@ -57,25 +57,24 @@ INSERT INTO `categoria` (`cod_categoria`, `nome_categoria`) VALUES
 
 CREATE TABLE `cliente` (
   `cod_cli` int(11) NOT NULL,
-  `nome` varchar(100) NOT NULL,
-  `cpf` varchar(20) NOT NULL,
+  `nome_cli` varchar(100) NOT NULL,
+  `cpf_cli` varchar(20) NOT NULL,
   `endereco` varchar(100) NOT NULL,
   `num_endereco` int(11) NOT NULL,
-  `cidade` varchar(50) NOT NULL,
-  `uf` varchar(2) NOT NULL,
+  `cidade_uf` varchar(50) NOT NULL,
+  `bairro` varchar(20) NOT NULL,
   `telefone` varchar(20) DEFAULT NULL,
-  `celular` varchar(20) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `senha_cli` varchar(50) NOT NULL,
-  `id_per_fk` int(11) NOT NULL
+  `celular` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `cliente`
 --
 
-INSERT INTO `cliente` (`cod_cli`, `nome`, `cpf`, `endereco`, `num_endereco`, `cidade`, `uf`, `telefone`, `celular`, `email`, `senha_cli`, `id_per_fk`) VALUES
-(5, 'ANA', '12345', 'r ddddd', 23, 'itape', 'sp', '33333', '4444', 'dfdfdf', '123', 3);
+INSERT INTO `cliente` (`cod_cli`, `nome_cli`, `cpf_cli`, `endereco`, `num_endereco`, `cidade_uf`, `bairro`, `telefone`, `celular`) VALUES
+(5, 'ANA', '12345', 'r ddddd', 23, 'Itape/sp', 'lalala', '33333', '4444'),
+(6, 'Souza', '1010', 'r ahsuahs', 65, 'Itape/sp', 'fantasia', '232323', '34343'),
+(7, 'cesar', '102030', 'erere', 233, 'frfrf', 'vffvf', '34344', '4545');
 
 -- --------------------------------------------------------
 
@@ -99,7 +98,8 @@ CREATE TABLE `funcionario` (
 INSERT INTO `funcionario` (`id_fun`, `nome`, `cpf_func`, `data_reg`, `id_per_fk`, `senha_fun`) VALUES
 (1, 'cesar', 1234567, '2018-10-18 19:36:55', 1, '123'),
 (2, 'lucas', 123456, '2018-10-18 19:36:55', 2, '123'),
-(3, 'suzana', 12345678, '2018-10-25 02:40:14', 2, '123');
+(6, 'suzana', 12345678, '2018-11-07 19:25:53', 2, '123'),
+(7, 'ss', 0, '2018-11-19 00:33:47', 1, '123');
 
 -- --------------------------------------------------------
 
@@ -131,7 +131,7 @@ INSERT INTO `perfil` (`id_per`, `perfil`, `data`) VALUES
 CREATE TABLE `produto` (
   `cod_prod` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
-  `preco` decimal(10,0) NOT NULL,
+  `preco` double(10,2) NOT NULL,
   `Id_categoria_fk` int(11) NOT NULL,
   `quantidade` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -141,23 +141,21 @@ CREATE TABLE `produto` (
 --
 
 INSERT INTO `produto` (`cod_prod`, `nome`, `preco`, `Id_categoria_fk`, `quantidade`) VALUES
-(1, '20 Sementes de Orquídea', '10', 1, 6),
-(2, 'Buquê de 30 Rosas Vermelhas', '230', 2, 4),
-(3, 'Cesta de Flores do Campo', '150', 3, 2),
-(4, 'Cachepot de Cerâmica', '80', 4, 2),
-(5, 'Violeta', '15', 5, 0),
-(6, 'Cacto Mandacaru Pote 30L', '100', 6, 8),
-(7, 'Mix de Margaridas vaso de vidro', '50', 7, 6),
-(8, 'Coroa de Flores para Velório', '600', 8, 4),
-(9, 'Terra Vegetal 5 Kg', '10', 9, 2),
-(10, 'Cesta de Chocolate', '150', 10, 0),
-(13, 'tulipa', '1', 5, 1),
-(32, 'sd', '43', 5, 34),
-(33, 'wde', '343', 3, 34),
-(34, 'rfedf', '454', 3, 545),
-(35, 'yyy', '34', 6, 5),
-(36, 'yyy', '34', 6, 5),
-(37, 'yyy', '34', 6, 5);
+(1, '20 Sementes de Orquídea', 10.00, 1, 6),
+(2, 'Buquê de 30 Rosas Vermelhas', 230.00, 2, 4),
+(3, 'Cesta de Flores do Campo', 150.00, 3, 2),
+(4, 'Cachepot de Cerâmica', 80.00, 4, 2),
+(5, 'Violeta', 15.00, 5, 0),
+(6, 'Cacto Mandacaru Pote 30L', 100.00, 6, 8),
+(7, 'Mix de Margaridas vaso de vidro', 50.00, 7, 6),
+(8, 'Coroa de Flores para Velório', 600.00, 8, 4),
+(9, 'Terra Vegetal 5 Kg', 10.00, 9, 2),
+(10, 'Cesta de Chocolate', 150.00, 10, 0),
+(13, 'tulipa', 1.00, 5, 1),
+(32, 'sd', 43.00, 5, 34),
+(33, 'weweweweewe', 3434343.00, 5, 454545454),
+(35, 'Margarida', 14.00, 5, 50),
+(36, 'yyy', 34.00, 6, 5);
 
 -- --------------------------------------------------------
 
@@ -199,9 +197,7 @@ ALTER TABLE `categoria`
 -- Indexes for table `cliente`
 --
 ALTER TABLE `cliente`
-  ADD PRIMARY KEY (`cod_cli`),
-  ADD UNIQUE KEY `cpf` (`cpf`),
-  ADD KEY `id_per_fk` (`id_per_fk`);
+  ADD PRIMARY KEY (`cod_cli`);
 
 --
 -- Indexes for table `funcionario`
@@ -251,13 +247,13 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT for table `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `cod_cli` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cod_cli` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `funcionario`
 --
 ALTER TABLE `funcionario`
-  MODIFY `id_fun` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_fun` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `perfil`
@@ -269,7 +265,7 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT for table `produto`
 --
 ALTER TABLE `produto`
-  MODIFY `cod_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `cod_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `venda`
@@ -280,12 +276,6 @@ ALTER TABLE `venda`
 --
 -- Constraints for dumped tables
 --
-
---
--- Limitadores para a tabela `cliente`
---
-ALTER TABLE `cliente`
-  ADD CONSTRAINT `cliente_ibfk_1` FOREIGN KEY (`id_per_fk`) REFERENCES `perfil` (`id_per`);
 
 --
 -- Limitadores para a tabela `funcionario`
