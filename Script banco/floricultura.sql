@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 28-Nov-2018 às 20:18
+-- Generation Time: 05-Dez-2018 às 20:26
 -- Versão do servidor: 10.1.35-MariaDB
 -- versão do PHP: 7.2.9
 
@@ -37,13 +37,6 @@ CREATE TABLE `carrinho` (
   `val_total` decimal(10,2) NOT NULL,
   `valor_unitario` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `carrinho`
---
-
-INSERT INTO `carrinho` (`cod_car`, `cod_prod`, `fkvenda`, `idpprod`, `unidade`, `val_total`, `valor_unitario`) VALUES
-(18, 2, 2, 'sera', 2, '10.00', '10.00');
 
 --
 -- Acionadores `carrinho`
@@ -123,29 +116,6 @@ CREATE TABLE `detalhe_venda` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Extraindo dados da tabela `detalhe_venda`
---
-
-INSERT INTO `detalhe_venda` (`cod_detalhe`, `produto`, `unidade`, `valor_unitario`, `valor_total`, `idfk_venda`, `idfk_prod`) VALUES
-(12, '3', 10, '0.00', '30.00', 3, 1),
-(13, '4', 10, '0.00', '40.00', 3, 1),
-(14, 'fffffffffff', 3, '4.00', '30.00', 3, 2),
-(15, 'ddd', 2, '10.00', '20.00', 3, 2),
-(16, 'dfdfdf', 3, '10.00', '30.00', 3, 5),
-(17, 'sedefre', 4, '5.00', '30.00', 3, 5),
-(18, '3', 10, '0.00', '30.00', 4, 1),
-(19, '4', 10, '0.00', '40.00', 4, 1),
-(20, 'fffffffffff', 3, '4.00', '30.00', 4, 2),
-(21, 'ddd', 2, '10.00', '20.00', 4, 2),
-(22, 'dfdfdf', 3, '10.00', '30.00', 4, 5),
-(23, 'sedefre', 4, '5.00', '30.00', 4, 5),
-(24, 'sementes', 6, '10.00', '30.00', 4, 1),
-(28, 'kkkk', 3, '4.00', '30.00', 7, 1),
-(29, 'kkkk', 3, '4.00', '30.00', 8, 1),
-(30, 'fffffffffff', 3, '4.00', '30.00', 8, 2),
-(31, 'fff', 5, '55.00', '40.00', 8, 3);
-
---
 -- Acionadores `detalhe_venda`
 --
 DELIMITER $$
@@ -173,7 +143,7 @@ CREATE TABLE `funcionario` (
 --
 
 INSERT INTO `funcionario` (`id_fun`, `nome`, `cpf_func`, `data_reg`, `id_per_fk`, `senha_fun`) VALUES
-(1, 'cesar', 1234567, '2018-10-18 19:36:55', 1, '123'),
+(1, 'Cesar', 1234567, '2018-10-18 19:36:55', 1, '123'),
 (2, 'lucas', 123456, '2018-10-18 19:36:55', 2, '123'),
 (6, 'suzana', 12345678, '2018-11-07 19:25:53', 2, '123'),
 (7, 'ss', 0, '2018-11-19 00:33:47', 1, '123');
@@ -218,21 +188,22 @@ CREATE TABLE `produto` (
 --
 
 INSERT INTO `produto` (`cod_prod`, `nome`, `preco`, `Id_categoria_fk`, `quantidade`) VALUES
-(1, '20 Sementes de Orquídea', 10.00, 1, 5),
-(2, 'Buquê de 30 Rosas Vermelhas', 230.00, 2, 8),
+(1, '20 Sementes de Orquídea', 10.00, 1, 1),
+(2, 'Buquê de 30 Rosas Vermelhas', 230.00, 2, -6),
 (3, 'Cesta de Flores do Campo', 150.00, 3, 12),
 (4, 'Cachepot de Cerâmica', 80.00, 4, 17),
-(5, 'Violeta', 15.00, 5, 11),
+(5, 'Violeta', 15.00, 5, 24),
 (6, 'Cacto Mandacaru Pote 30L', 100.00, 6, 17),
 (7, 'Mix de Margaridas vaso de vidro', 50.00, 7, 17),
 (8, 'Coroa de Flores para Velório', 600.00, 8, 17),
 (9, 'Terra Vegetal 5 Kg', 10.00, 9, 17),
 (10, 'Cesta de Chocolate', 150.00, 10, 17),
-(13, 'tulipa', 1.00, 5, 17),
+(13, 'tulipa', 1.00, 5, 14),
 (32, 'sd', 43.00, 5, 31),
 (33, 'weweweweewe', 3434343.00, 5, 17),
 (35, 'Margarida', 14.00, 5, 47),
-(36, 'yyy', 34.00, 6, 17);
+(36, 'yyy', 34.00, 6, 17),
+(37, 'girassol', 2.50, 1, 39);
 
 -- --------------------------------------------------------
 
@@ -244,22 +215,9 @@ CREATE TABLE `venda` (
   `cod_venda` int(11) NOT NULL,
   `data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `cod_cli` int(11) NOT NULL,
-  `form_pg` varchar(20) NOT NULL
+  `form_pg` varchar(20) NOT NULL,
+  `cpfClivenda` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `venda`
---
-
-INSERT INTO `venda` (`cod_venda`, `data`, `cod_cli`, `form_pg`) VALUES
-(1, '2018-11-28 16:50:20', 5, 'cartao'),
-(2, '2018-11-28 16:50:20', 7, 'a vista'),
-(3, '2018-11-28 16:50:20', 5, 'cartao'),
-(4, '2018-11-28 16:50:20', 7, 'a vista'),
-(5, '2018-11-28 16:50:20', 5, 'a vista'),
-(6, '2018-11-28 16:50:20', 7, 'cartao'),
-(7, '2018-11-28 16:50:20', 5, 'a vista'),
-(8, '2018-11-28 16:50:38', 5, 'a vista');
 
 --
 -- Acionadores `venda`
@@ -334,7 +292,7 @@ ALTER TABLE `venda`
 -- AUTO_INCREMENT for table `carrinho`
 --
 ALTER TABLE `carrinho`
-  MODIFY `cod_car` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `cod_car` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `categoria`
@@ -352,7 +310,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT for table `detalhe_venda`
 --
 ALTER TABLE `detalhe_venda`
-  MODIFY `cod_detalhe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `cod_detalhe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `funcionario`
@@ -370,13 +328,13 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT for table `produto`
 --
 ALTER TABLE `produto`
-  MODIFY `cod_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `cod_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `venda`
 --
 ALTER TABLE `venda`
-  MODIFY `cod_venda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `cod_venda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Constraints for dumped tables
