@@ -25,7 +25,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		//Cadsstrar novo usuario
 		$sql_insert_up="update funcionario set cpf_func='$cpf',senha_fun='$sen',id_per_fk='$id_fk',nome='$nome' where id_fun='$id_fun'";
  
-   //If de inserte novo usuario
+   //If de alterar usuario
 if($nome!='')	
 {
 	$query=mysqli_query($conn,$sql_insert_up);

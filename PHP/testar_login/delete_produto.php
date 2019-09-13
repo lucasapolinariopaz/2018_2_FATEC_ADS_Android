@@ -13,14 +13,19 @@ $codigo=$_POST['codigo'];
 
 $consulta = "delete from produto where cod_prod='$codigo'";
 $tem=array();
+$tem["erro"]=true;
 
 if(mysqli_query($conn, $consulta))
 {
-     $tem["Sucesso"]= "successo!";
+	 $tem["erro"]=false;
+     $tem["Sucesso"]= "successo ao excluir!";
 }
 else
-{    $tem["Sucesso"]= "Erro ao deletar!";
-    echo mysqli_error($conn);
+	
+{  
+     $tem["erro"]=true;     
+    $tem["Sucesso"]= "Erro ao deletar!";
+   // echo mysqli_error($conn);
 }
  
 
