@@ -13,7 +13,7 @@ if ($ambiente) { // Ambiente de Produção
     $HostName = "localhost";
     $HostUser = "root";
     $HostPass = "";
-    $DatabaseName = "youtube";
+    $DatabaseName = "floricultura";
     
 }
 ?>
